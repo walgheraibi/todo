@@ -59,7 +59,7 @@ public class ServletToDoList extends HttpServlet {
 							productListMsg+=" On the "+todoList.get(i).getDatecompleted();
 						}
 						productListMsg	+= "</td><td>"
-								+"<a href='Updateitem?itemid="+todoList.get(i).getId()+"' class='btn pull-left btn-primary '>Edit</a></td>"
+								+"<a href=\"Updateitem?itemid="+todoList.get(i).getId()+"&isEdit=false\" class='btn pull-left btn-primary '>Edit</a></td>"
 								+"<td><a href='Deleteitem?itemid="+todoList.get(i).getId()+"' class='btn pull-left btn-primary '>Delete</a></td></tr>";
 						}
 		}

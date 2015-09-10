@@ -23,7 +23,7 @@ import DB.DBUtil;
 @WebServlet("/Updateitem")
 public class Updateitem extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	long itemid = 0;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,40 +43,49 @@ public class Updateitem extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		
-		long itemid = Long.parseLong(request.getParameter("itemid"));
-		
-		if(request.getAttribute("isEdit").equals("true"))
+	
+		if(request.getParameter("isEdit") != null && request.getParameter("isEdit").equals("false"))
 		{
-			String inputdes = request.getParameter("description");
+			itemid = Long.parseLong(request.getParameter("itemid"));
+			session.setAttribute("itemid", itemid);
+			getServletContext().getRequestDispatcher("/Edititem.jsp").forward(
+					request, response);
+			
+			
+		}
+		else
+		{
+			
 			String inputduedate = request.getParameter("duedate");
 			int inputstatus = Integer.parseInt(request.getParameter("status"));
-			HttpSession session = request.getSession();
+			 session = request.getSession();
 			Todouser user = (Todouser) session.getAttribute("user"); 
 			Date dueDate = null;
+			Date completDate = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("mm-dd-yyyy");
+			Todolist item = DBUtil.getitem((long)session.getAttribute("itemid"));
+			if(inputduedate!= null && inputduedate!="")
+			{
 			try {
 				dueDate = formatter.parse(inputduedate);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-				Todolist item = new Todolist();
-				item.setDescription(inputdes);
+			System.out.println(dueDate);
+			item.setDuedate(dueDate);
+		}
+				
 				Todostatus state  = DBUtil.getstatus(inputstatus);
 				item.setTodostatus(state);
-				item.setDuedate(dueDate);
+				if(inputstatus == 3)
+					item.setDatecompleted(completDate);
 				item.setTodouser(user);
-				item.setId(itemid);
 				DBUtil.updateitem(item);
 			getServletContext().getRequestDispatcher("/ServletToDoList").forward(
 					request, response);
-		}
-		else
-		{
-		getServletContext().getRequestDispatcher("/Edititem.jsp").forward(
-				request, response);
 		}
 	}
 

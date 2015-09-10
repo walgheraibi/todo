@@ -18,14 +18,7 @@
 		<form class="form-horizontal" role="form" name="AdditemForm"
 			id="AdditemForm" action="Updateitem" method="post">
 			<input hidden action="isEdit" value="true"/> 
-			<div class="form-group">
-				<label class="control-label col-sm-2" for="description">DESCRIPTION:
-				</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" name="description"
-						id="description" placeholder="Enter description">
-				</div>
-			</div>
+			
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="email">Due date</label>
 				<div class="col-sm-10">

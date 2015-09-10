@@ -79,6 +79,20 @@ public class DBUtil {
 					}
 				}
 				
+				public static Todolist getitem(long itemid) {
+					EntityManager em = DBUtil.getEmFactory().createEntityManager();
+					String query = "SELECT t FROM Todolist t WHERE t.id="+itemid+"";
+					TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
+					try {
+						Todolist retitem = q.getSingleResult();
+						return retitem;
+					} catch (Exception e) {
+						return null;
+					} finally {
+						em.close();
+					}
+				}
+				
 public static void insertitem(Todolist item) {
 					EntityManager em = DBUtil.getEmFactory().createEntityManager();
 					EntityTransaction trans = em.getTransaction();
@@ -95,18 +109,14 @@ public static void insertitem(Todolist item) {
 				}
 
 
-//HERE TMOrrow
+
 public static void updateitem(Todolist item) {
 	EntityManager em = DBUtil.getEmFactory().createEntityManager();
 	EntityTransaction trans = em.getTransaction();
 	trans.begin();
-	String sql = "Update Todolist c set c.itemInstock= c.itemInstock - 1 where c.itemId = "
-			+ item.getId();
-	TypedQuery<Todolist> query;
-
-	query = em.createQuery(sql, Todolist.class);
+	
 	try {
-		query.executeUpdate();
+		em.merge(item);
 		trans.commit();
 	} catch (Exception e) {
 		System.out.println(e);
