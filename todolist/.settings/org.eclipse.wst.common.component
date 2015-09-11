@@ -2,6 +2,7 @@
     <wb-module deploy-name="todolist">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/Integration test"/>
         <property name="context-root" value="todolist"/>
         <property name="java-output-path" value="/todolist/build/classes"/>
     </wb-module>

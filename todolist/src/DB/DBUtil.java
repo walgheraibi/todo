@@ -13,175 +13,175 @@ import todolist.Todostatus;
 import todolist.Todouser;
 
 public class DBUtil {
-	private static final EntityManagerFactory emf = 
-			Persistence.createEntityManagerFactory("todolist");
-				public static EntityManagerFactory getEmFactory() {
-					return emf;
-				}
+	private static final EntityManagerFactory emf = Persistence
+			.createEntityManagerFactory("todolist");
 
-				public static Todouser selectByName(String name) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					String query = "SELECT e FROM Todouser e WHERE e.username = '" + name + "'";
-					TypedQuery<Todouser> q = em.createQuery(query, Todouser.class);
-					try {
-						Todouser user = q.getSingleResult();
-						return user;
-					} catch (Exception e) {
-						return null;
-					} finally {
-						em.close();
-					}
-				}
-				
-				public static void deleteitemtodi(long itemid) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					EntityTransaction trans = em.getTransaction();
-					String query = "Delete from Todolist t  where t.id = " + itemid;
-					TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
-
-					trans.begin();
-					try {
-						q.executeUpdate();
-						trans.commit();
-					} catch (Exception e) {
-
-					} finally {
-						em.close();
-					}
-				}
-				
-				public static Todouser selectByEmail(String email) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					String query = "SELECT e FROM Todouser e WHERE e.email = '" + email + "'";
-					TypedQuery<Todouser> q = em.createQuery(query, Todouser.class);
-					try {
-						Todouser user = q.getSingleResult();
-						return user;
-					} catch (Exception e) {
-						return null;
-					} finally {
-						em.close();
-					}
-				}
-				
-				public static Todostatus getstatus(int status) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					String query = "SELECT e FROM Todostatus e WHERE e.id = " + status + "";
-					TypedQuery<Todostatus> q = em.createQuery(query, Todostatus.class);
-					try {
-						Todostatus retstatus = q.getSingleResult();
-						System.out.println(retstatus.getStatus());
-						return retstatus;
-					} catch (Exception e) {
-						return null;
-					} finally {
-						em.close();
-					}
-				}
-				
-				public static Todolist getitem(long itemid) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					String query = "SELECT t FROM Todolist t WHERE t.id="+itemid+"";
-					TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
-					try {
-						Todolist retitem = q.getSingleResult();
-						return retitem;
-					} catch (Exception e) {
-						return null;
-					} finally {
-						em.close();
-					}
-				}
-				
-public static void insertitem(Todolist item) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					EntityTransaction trans = em.getTransaction();
-					trans.begin();
-					try {
-						em.persist(item);
-						trans.commit();
-					} catch (Exception e) {
-						System.out.println(e);
-						//trans.rollback();
-					} finally {
-						em.close();
-					}
-				}
-
-
-
-public static void updateitem(Todolist item) {
-	EntityManager em = DBUtil.getEmFactory().createEntityManager();
-	EntityTransaction trans = em.getTransaction();
-	trans.begin();
-	
-	try {
-		em.merge(item);
-		trans.commit();
-	} catch (Exception e) {
-		System.out.println(e);
-		//trans.rollback();
-	} finally {
-		em.close();
+	public static EntityManagerFactory getEmFactory() {
+		return emf;
 	}
-}
 
+	public static Todouser selectByName(String name) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		String query = "SELECT e FROM Todouser e WHERE e.username = '" + name
+				+ "'";
+		TypedQuery<Todouser> q = em.createQuery(query, Todouser.class);
+		try {
+			Todouser user = q.getSingleResult();
+			return user;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
 
-	
-public static void insert(Todouser user) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					EntityTransaction trans = em.getTransaction();
-					trans.begin();
-					try {
-						System.out.print(""+user.getEmail());
-						System.out.print(""+user.getPassword());
-						System.out.print(""+user.getUsername());
-						em.persist(user);
-						trans.commit();
-					} catch (Exception e) {
-						System.out.println(e);
-						//trans.rollback();
-					} finally {
-						em.close();
-					}
-				}
-		
-public static List<Todolist> getCompletedList(Todouser user, Todostatus status) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					String query = "SELECT t FROM Todolist t WHERE t.todouser=:user and t.todostatus=:status";
-					System.out.println(query);
-					List<Todolist> todo = null ;
-					TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
-					q.setParameter("user", user);
-					q.setParameter("status", status);
-					try {
-						todo = q.getResultList();
+	public static void deleteitemtodi(long itemid) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		String query = "Delete from Todolist t  where t.id = " + itemid;
+		TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
 
-					} catch (Exception e) {
-					} finally {
-						em.close();
-					}
-					return todo;
-				}
+		trans.begin();
+		try {
+			q.executeUpdate();
+			trans.commit();
+		} catch (Exception e) {
 
-				public static List<Todolist> getToDoList(Todouser user) {
-					EntityManager em = DBUtil.getEmFactory().createEntityManager();
-					
-					String query = "SELECT t FROM Todolist t WHERE t.todouser=:user";
-					System.out.println(query);
-					List<Todolist> todo = null ;
-					TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
-					q.setParameter("user", user);
-					try {
-						todo= q.getResultList();
-					
-					} catch (Exception e) {
+		} finally {
+			em.close();
+		}
+	}
 
-						System.out.println(e);
-					} finally {
-						em.close();
-					}
-					return todo;
-				}
-				
+	public static Todouser selectByEmail(String email) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		String query = "SELECT e FROM Todouser e WHERE e.email = '" + email
+				+ "'";
+		TypedQuery<Todouser> q = em.createQuery(query, Todouser.class);
+		try {
+			Todouser user = q.getSingleResult();
+			return user;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Todostatus getstatus(int status) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		String query = "SELECT e FROM Todostatus e WHERE e.id = " + status + "";
+		TypedQuery<Todostatus> q = em.createQuery(query, Todostatus.class);
+		try {
+			Todostatus retstatus = q.getSingleResult();
+			System.out.println(retstatus.getStatus());
+			return retstatus;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static Todolist getitem(long itemid) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		String query = "SELECT t FROM Todolist t WHERE t.id=" + itemid + "";
+		TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
+		try {
+			Todolist retitem = q.getSingleResult();
+			return retitem;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void insertitem(Todolist item) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		try {
+			em.persist(item);
+			trans.commit();
+		} catch (Exception e) {
+			System.out.println(e);
+			// trans.rollback();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void updateitem(Todolist item) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+
+		try {
+			em.merge(item);
+			trans.commit();
+		} catch (Exception e) {
+			System.out.println(e);
+			// trans.rollback();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static void insert(Todouser user) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		try {
+			System.out.print("" + user.getEmail());
+			System.out.print("" + user.getPassword());
+			System.out.print("" + user.getUsername());
+			em.persist(user);
+			trans.commit();
+		} catch (Exception e) {
+			System.out.println(e);
+			// trans.rollback();
+		} finally {
+			em.close();
+		}
+	}
+
+	public static List<Todolist> getCompletedList(Todouser user,
+			Todostatus status) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		String query = "SELECT t FROM Todolist t WHERE t.todouser=:user and t.todostatus=:status";
+		System.out.println(query);
+		List<Todolist> todo = null;
+		TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
+		q.setParameter("user", user);
+		q.setParameter("status", status);
+		try {
+			todo = q.getResultList();
+
+		} catch (Exception e) {
+		} finally {
+			em.close();
+		}
+		return todo;
+	}
+
+	public static List<Todolist> getToDoList(Todouser user) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+
+		String query = "SELECT t FROM Todolist t WHERE t.todouser=:user";
+		System.out.println(query);
+		List<Todolist> todo = null;
+		TypedQuery<Todolist> q = em.createQuery(query, Todolist.class);
+		q.setParameter("user", user);
+		try {
+			todo = q.getResultList();
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+		} finally {
+			em.close();
+		}
+		return todo;
+	}
+
 }
